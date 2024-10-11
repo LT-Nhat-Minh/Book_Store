@@ -1,15 +1,47 @@
-import React from 'react';
+import React, {useState, useMemo} from 'react';
 import { Button, Checkbox, Form, Input } from 'antd';
+import { Divider } from 'antd';
+import {
+  RadiusBottomleftOutlined,
+  RadiusBottomrightOutlined,
+  RadiusUpleftOutlined,
+  RadiusUprightOutlined,
+} from '@ant-design/icons';
+import { Button, Divider, notification, Space } from 'antd'
+import { CallRegister } from "../../services/api";
 import "./style.scss"
 
-function Register(props) {
+const Context = React.createContext({
+  name: 'Default',
+});
 
-  const onFinish = (values) => {
-    console.log('Success:', values);
+function Register(props) {
+  const {isSubmit, setIsSubmit} = useState(false);
+  const onFinish = async (values) => {
+    const {fullName, email, password, phone} = values;
+    setIsSubmit(true);
+    const res = await CallRegister(values);
+    if(res?.data?._id){
+
+    }
   };
   const onFinishFailed = (errorInfo) => {
     console.log('Failed:', errorInfo);
   };
+  const [api, contextHolder] = notification.useNotification();
+  const openNotification = (placement) => {
+    api.info({
+      message: `Notification ${placement}`,
+      description: <Context.Consumer>{({ name }) => `Hello, ${name}!`}</Context.Consumer>,
+      placement,
+    });
+  };
+  const contextValue = useMemo(
+    () => ({
+      name: 'Ant Design',
+    }),
+    [],
+  );
   return (
     <div style={{margin: "auto"}}>
       <div style={{textAlign: "center"}}>
@@ -87,28 +119,51 @@ function Register(props) {
           <Input />
         </Form.Item>
 
-        {/* <Form.Item
-          name="remember"
-          valuePropName="checked"
-          wrapperCol={{
-            offset: 8,
-            span: 16,
-          }}
-        >
-          <Checkbox>Remember me</Checkbox>
-        </Form.Item> */}
-
         <Form.Item
           wrapperCol={{
-            offset: 8,
-            span: 16,
+            offset: 0,
+            span: 24,
           }}
+          style={{display: "flex", justifyContent: "center"}}
         >
-          <Button type="primary" htmlType="submit">
+          <Button type="primary" htmlType="submit" loading={isSubmit}>
             Đăng ký
           </Button>
         </Form.Item>
+        <Divider plain>Or</Divider>
+        <div style={{display: "flex", float: "right"}}>
+        <p>Đã có tài khoản?</p><a href="/login" style={{margin: "auto 20px"}}>Đăng nhập</a>
+        </div>
       </Form>
+      <Context.Provider value={contextValue}>
+      {contextHolder}
+      <Space>
+        <Button
+          type="primary"
+          onClick={() => openNotification('topRight')}
+          icon={<RadiusUprightOutlined />}
+        >
+          topRight
+        </Button>
+      </Space>
+      <Divider />
+      <Space>
+        <Button
+          type="primary"
+          onClick={() => openNotification('bottomLeft')}
+          icon={<RadiusBottomleftOutlined />}
+        >
+          bottomLeft
+        </Button>
+        <Button
+          type="primary"
+          onClick={() => openNotification('bottomRight')}
+          icon={<RadiusBottomrightOutlined />}
+        >
+          bottomRight
+        </Button>
+      </Space>
+    </Context.Provider>
     </div>
   );
 }
