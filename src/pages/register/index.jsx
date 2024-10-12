@@ -1,54 +1,62 @@
-import React, {useState, useMemo} from 'react';
-import { Button, Checkbox, Form, Input } from 'antd';
-import { Divider } from 'antd';
+import React, { useState, useMemo } from "react";
+import {
+  Button,
+  Checkbox,
+  Form,
+  Input,
+  Divider,
+  notification,
+  Space,
+  message,
+  InputNumber,
+} from "antd";
 import {
   RadiusBottomleftOutlined,
   RadiusBottomrightOutlined,
   RadiusUpleftOutlined,
   RadiusUprightOutlined,
-} from '@ant-design/icons';
-import { Button, Divider, notification, Space } from 'antd'
-import { CallRegister } from "../../services/api";
-import "./style.scss"
+} from "@ant-design/icons";
+import { callRegister } from "../../services/api";
+import "./style.scss";
+import { useNavigate } from "react-router-dom";
 
-const Context = React.createContext({
-  name: 'Default',
-});
-
-function Register(props) {
-  const {isSubmit, setIsSubmit} = useState(false);
+function Register() {
+  const navigate = useNavigate();
+  const [isSubmit, setIsSubmit] = useState(false);
   const onFinish = async (values) => {
-    const {fullName, email, password, phone} = values;
+    const { fullName, email, password, phone } = values;
     setIsSubmit(true);
-    const res = await CallRegister(values);
-    if(res?.data?._id){
-
+    const res = await callRegister(fullName, email, password, phone);
+    setIsSubmit(false);
+    if (res?.data?._id) {
+      message.success({
+        content: "Đăng ký thành công!",
+      });
+      navigate("/login");
+    } else {
+      notification.error({
+        description:
+          res.message && Array.isArray(res.message)
+            ? res.message[0]
+            : res.message,
+        placement: "topRight",
+        message: "Có lỗi xảy ra",
+        showProgress: true,
+      });
     }
   };
   const onFinishFailed = (errorInfo) => {
-    console.log('Failed:', errorInfo);
+    console.log("Failed:", errorInfo);
   };
-  const [api, contextHolder] = notification.useNotification();
-  const openNotification = (placement) => {
-    api.info({
-      message: `Notification ${placement}`,
-      description: <Context.Consumer>{({ name }) => `Hello, ${name}!`}</Context.Consumer>,
-      placement,
-    });
-  };
-  const contextValue = useMemo(
-    () => ({
-      name: 'Ant Design',
-    }),
-    [],
-  );
+
   return (
-    <div style={{margin: "auto"}}>
-      <div style={{textAlign: "center"}}>
+    <div style={{ margin: "auto" }}>
+      <div style={{ textAlign: "center" }}>
         <h1>Đăng ký người dùng mới</h1>
         <hr />
       </div>
-      <Form className="formContainer"
+      <Form
+        className="formContainer"
         name="basic"
         labelCol={{
           span: 24,
@@ -66,14 +74,13 @@ function Register(props) {
         onFinishFailed={onFinishFailed}
         autoComplete="off"
       >
-
-<Form.Item
+        <Form.Item
           label="Họ và tên"
-          name="fullname"
+          name="fullName"
           rules={[
             {
               required: true,
-              message: 'Vui lòng điền tên!',
+              message: "Vui lòng điền tên!",
             },
           ]}
         >
@@ -86,7 +93,7 @@ function Register(props) {
           rules={[
             {
               required: true,
-              message: 'Vui lòng điền email!',
+              message: "Vui lòng điền email!",
             },
           ]}
         >
@@ -99,7 +106,7 @@ function Register(props) {
           rules={[
             {
               required: true,
-              message: 'Vui lòng điền mật khẩu!',
+              message: "Vui lòng điền mật khẩu!",
             },
           ]}
         >
@@ -108,15 +115,16 @@ function Register(props) {
 
         <Form.Item
           label="Số điện thoại"
-          name="phonenumber"
+          name="phone"
           rules={[
             {
+              type: "number",
               required: true,
-              message: 'Vui lòng điền số điện thoại!',
+              message: "Vui lòng điền số điện thoại!",
             },
           ]}
         >
-          <Input />
+          <InputNumber style={{ width: "100%" }} controls={false} />
         </Form.Item>
 
         <Form.Item
@@ -124,46 +132,20 @@ function Register(props) {
             offset: 0,
             span: 24,
           }}
-          style={{display: "flex", justifyContent: "center"}}
+          style={{ display: "flex", justifyContent: "center" }}
         >
           <Button type="primary" htmlType="submit" loading={isSubmit}>
             Đăng ký
           </Button>
         </Form.Item>
         <Divider plain>Or</Divider>
-        <div style={{display: "flex", float: "right"}}>
-        <p>Đã có tài khoản?</p><a href="/login" style={{margin: "auto 20px"}}>Đăng nhập</a>
+        <div style={{ display: "flex", float: "right" }}>
+          <p>Đã có tài khoản?</p>
+          <a href="/login" style={{ margin: "auto 20px" }}>
+            Đăng nhập
+          </a>
         </div>
       </Form>
-      <Context.Provider value={contextValue}>
-      {contextHolder}
-      <Space>
-        <Button
-          type="primary"
-          onClick={() => openNotification('topRight')}
-          icon={<RadiusUprightOutlined />}
-        >
-          topRight
-        </Button>
-      </Space>
-      <Divider />
-      <Space>
-        <Button
-          type="primary"
-          onClick={() => openNotification('bottomLeft')}
-          icon={<RadiusBottomleftOutlined />}
-        >
-          bottomLeft
-        </Button>
-        <Button
-          type="primary"
-          onClick={() => openNotification('bottomRight')}
-          icon={<RadiusBottomrightOutlined />}
-        >
-          bottomRight
-        </Button>
-      </Space>
-    </Context.Provider>
     </div>
   );
 }
