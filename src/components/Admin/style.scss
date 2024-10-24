@@ -1,0 +1,32 @@
+.admin_content{
+    width: 100%;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    & .user{
+        margin: 20px;
+        box-shadow: 0 0 5px rgba(0,0,0,0.3);
+    }
+}
+.admin_header{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 10px;
+    & > .account > .space{
+        display: flex;
+        align-items: center;
+        padding: 20px 10px;
+        &:hover{
+            cursor: pointer;
+        }
+    }
+}
+
+.admin_footer{
+    width: 100%;
+    margin-top: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}

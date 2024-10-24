@@ -1,7 +1,7 @@
 import React from "react";
 
-function Book() {
-  return <div>book page</div>;
+function Book(props) {
+  return <div></div>;
 }
 
 export default Book;

@@ -1,11 +1,11 @@
 import React, { useState } from "react";
 import { Button, Checkbox, Form, Input, message, notification } from "antd";
 import { Divider } from "antd";
-import "./style.scss";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { callLogin } from "../../services/api";
 import { useDispatch } from "react-redux";
 import { doLoginAction } from "../../redux/account/accountSlice";
+import "./style.scss";
 
 function Login() {
   const navigate = useNavigate();
@@ -38,11 +38,7 @@ function Login() {
     console.log("Failed:", errorInfo);
   };
   return (
-    <div style={{ margin: "auto" }}>
-      <div style={{ textAlign: "center" }}>
-        <h1>Đăng nhập</h1>
-        <hr />
-      </div>
+    <div className="login-page">
       <Form
         className="formContainer"
         name="basic"
@@ -62,6 +58,7 @@ function Login() {
         onFinishFailed={onFinishFailed}
         autoComplete="off"
       >
+        <h1>Đăng nhập</h1>
         <Form.Item
           label="Email"
           name="username"
@@ -87,18 +84,6 @@ function Login() {
         >
           <Input.Password />
         </Form.Item>
-
-        {/* <Form.Item
-          name="remember"
-          valuePropName="checked"
-          wrapperCol={{
-            offset: 8,
-            span: 16,
-          }}
-        >
-          <Checkbox>Remember me</Checkbox>
-        </Form.Item> */}
-
         <Form.Item
           wrapperCol={{
             offset: 0,
@@ -113,9 +98,17 @@ function Login() {
         <Divider plain>Or</Divider>
         <div style={{ display: "flex", float: "right" }}>
           <p>Chưa có tài khoản?</p>
-          <a href="/register" style={{ margin: "auto 20px" }}>
-            Đăng ký
-          </a>
+          <Link
+            to="/register"
+            style={{
+              marginLeft: "20px",
+              display: "flex",
+              alignItems: "center",
+            }}
+          >
+            {" "}
+            Đăng Ký{" "}
+          </Link>
         </div>
       </Form>
     </div>

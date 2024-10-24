@@ -5,7 +5,7 @@ const Loading = () => {
     <>
       <HashLoader
         color="#2dd3ca"
-        size="100"
+        size="100%"
         style={{
           position: "fixed",
           top: "0",

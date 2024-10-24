@@ -18,12 +18,12 @@ import {
 } from "@ant-design/icons";
 import { callRegister } from "../../services/api";
 import "./style.scss";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 function Register() {
   const navigate = useNavigate();
   const [isSubmit, setIsSubmit] = useState(false);
-  const onFinish = async (values) => {
+  const onFinished = async (values) => {
     const { fullName, email, password, phone } = values;
     setIsSubmit(true);
     const res = await callRegister(fullName, email, password, phone);
@@ -50,11 +50,7 @@ function Register() {
   };
 
   return (
-    <div style={{ margin: "auto" }}>
-      <div style={{ textAlign: "center" }}>
-        <h1>Đăng ký người dùng mới</h1>
-        <hr />
-      </div>
+    <div className="register-page">
       <Form
         className="formContainer"
         name="basic"
@@ -65,15 +61,16 @@ function Register() {
           span: 24,
         }}
         style={{
-          maxWidth: 550,
+          maxWidth: 600,
         }}
         initialValues={{
           remember: true,
         }}
-        onFinish={onFinish}
+        onFinish={onFinished}
         onFinishFailed={onFinishFailed}
         autoComplete="off"
       >
+        <h1>Đăng ký</h1>
         <Form.Item
           label="Họ và tên"
           name="fullName"
@@ -141,9 +138,16 @@ function Register() {
         <Divider plain>Or</Divider>
         <div style={{ display: "flex", float: "right" }}>
           <p>Đã có tài khoản?</p>
-          <a href="/login" style={{ margin: "auto 20px" }}>
+          <Link
+            to="/login"
+            style={{
+              marginLeft: "20px",
+              display: "flex",
+              alignItems: "center",
+            }}
+          >
             Đăng nhập
-          </a>
+          </Link>
         </div>
       </Form>
     </div>
