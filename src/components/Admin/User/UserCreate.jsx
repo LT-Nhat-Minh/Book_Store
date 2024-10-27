@@ -12,6 +12,7 @@ import { callCreateAUser } from "../../../services/api";
 
 function UserCreateModal(props) {
   const [isSubmit, setIsSubmit] = useState(false);
+  const [form] = Form.useForm();
 
   const onFinished = async (values) => {
     const { fullName, email, password, phone } = values;
@@ -21,7 +22,7 @@ function UserCreateModal(props) {
       message.success({
         content: "Đăng ký thành công!",
       });
-      props.form.resetFields();
+      form.resetFields();
       props.setShowUserCreate(false);
       await props.fetchUser();
     } else {
@@ -35,6 +36,7 @@ function UserCreateModal(props) {
         showProgress: true,
       });
     }
+    form.resetFields();
     setIsSubmit(false);
   };
 
@@ -44,15 +46,18 @@ function UserCreateModal(props) {
         title="Thêm người dùng"
         open={props.showUserCreate}
         onOk={() => {
-          props.form.submit();
+          form.submit();
         }}
-        onCancel={() => props.setShowUserCreate(false)}
+        onCancel={() => {
+          props.setShowUserCreate(false);
+          form.resetFields();
+        }}
         maskClosable={false}
         confirmLoading={isSubmit}
       >
         <Divider />
         <Form
-          form={props.form}
+          form={form}
           className="formContainer"
           name="basic"
           labelCol={{
@@ -63,9 +68,6 @@ function UserCreateModal(props) {
           }}
           style={{
             maxWidth: 550,
-          }}
-          initialValues={{
-            remember: false,
           }}
           onFinish={onFinished}
           autoComplete="off"
@@ -106,7 +108,7 @@ function UserCreateModal(props) {
               },
             ]}
           >
-            <Input.Password />
+            <Input />
           </Form.Item>
 
           <Form.Item

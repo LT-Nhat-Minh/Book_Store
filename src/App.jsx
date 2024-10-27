@@ -79,7 +79,7 @@ export default function App() {
           ),
         },
         {
-          path: "user",
+          path: "crud",
           element: (
             <ProtectedRoute>
               <UserManager />

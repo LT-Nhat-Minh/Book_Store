@@ -1,6 +1,5 @@
-import { Button, Col, Form, Input, Row, Select, Space, theme } from "antd";
+import { Button, Col, Form, Input, Row, Space, theme } from "antd";
 import React from "react";
-const { Option } = Select;
 
 const AdvancedSearchForm = ({ onSubmit, onClear, setCurrent }) => {
   const { token } = theme.useToken();
@@ -14,17 +13,16 @@ const AdvancedSearchForm = ({ onSubmit, onClear, setCurrent }) => {
   };
 
   const onFinish = (values) => {
-    // console.log("Received values of form: ", values);
     setCurrent(1);
     let query = "";
-    if (values.fullName) {
-      query += `&fullName=/${values.fullName}/i`;
+    if (values.mainText) {
+      query += `&mainText=/${values.mainText}/i`;
     }
     if (values.email) {
-      query += `&email=/${values.email}/i`;
+      query += `&author=/${values.author}/i`;
     }
     if (values.phone) {
-      query += `&phone=/${values.phone}/i`;
+      query += `&category=/${values.catogory}/i`;
     }
     if (query) {
       onSubmit(query);
@@ -40,20 +38,24 @@ const AdvancedSearchForm = ({ onSubmit, onClear, setCurrent }) => {
     >
       <Row gutter={24}>
         <Col span={8}>
-          <Form.Item labelCol={{ span: 24 }} name={`fullName`} label={`Tên`}>
+          <Form.Item
+            labelCol={{ span: 24 }}
+            name={`mainText`}
+            label={`Tên sách`}
+          >
             <Input placeholder="placeholder" />
           </Form.Item>
         </Col>
         <Col span={8}>
-          <Form.Item labelCol={{ span: 24 }} name={`Email`} label={`Email`}>
+          <Form.Item labelCol={{ span: 24 }} name={`author`} label={`Tác giả`}>
             <Input placeholder="placeholder" />
           </Form.Item>
         </Col>
         <Col span={8}>
           <Form.Item
             labelCol={{ span: 24 }}
-            name={`Phone`}
-            label={`Số điện thoại`}
+            name={`category`}
+            label={`Thể loại`}
           >
             <Input placeholder="placeholder" />
           </Form.Item>
@@ -81,15 +83,17 @@ const AdvancedSearchForm = ({ onSubmit, onClear, setCurrent }) => {
     </Form>
   );
 };
-const InputSearch = ({ handleSearch, handleRefresh, setCurrent }) => {
+
+function BookSearch(props) {
   return (
-    <>
+    <div>
       <AdvancedSearchForm
-        onSubmit={handleSearch}
-        onClear={handleRefresh}
-        setCurrent={setCurrent}
+        onSubmit={props.handleSearch}
+        onClear={props.handleRefresh}
+        setCurrent={props.setCurrent}
       />
-    </>
+    </div>
   );
-};
-export default InputSearch;
+}
+
+export default BookSearch;

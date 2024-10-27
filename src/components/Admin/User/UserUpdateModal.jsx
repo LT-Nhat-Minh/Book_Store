@@ -1,5 +1,5 @@
 import { Form, Input, message, Modal, notification } from "antd";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { callUpdateUser } from "../../../services/api";
 
 function UserUpdateModal({
@@ -9,9 +9,10 @@ function UserUpdateModal({
   setUserIsUpdating,
 }) {
   const [form] = Form.useForm();
+  const formRef = useRef(null); // set initial ref as null
 
   useEffect(() => {
-    form.setFieldsValue(user);
+    if (formRef.current) form.setFieldsValue(user);
   }, [user]);
 
   const handleSubmit = async (values) => {
@@ -44,6 +45,7 @@ function UserUpdateModal({
         <Form
           form={form}
           className="ant-advanced-search-form"
+          ref={formRef}
           onSubmit={{}}
           labelCol={{
             span: 24,

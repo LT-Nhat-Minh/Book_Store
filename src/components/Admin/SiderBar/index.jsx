@@ -16,19 +16,9 @@ function AdminSideBar() {
       label: "Dashboard",
     },
     {
-      key: "sub1",
+      key: "CRUD",
       label: "Manage Users",
       icon: <UserOutlined />,
-      children: [
-        {
-          key: "",
-          label: "CRUD",
-        },
-        {
-          key: "user",
-          label: "User",
-        },
-      ],
     },
     {
       key: "book",

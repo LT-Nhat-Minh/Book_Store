@@ -13,7 +13,6 @@ function UserImportModal(props) {
       item.password = "123456";
       return item;
     });
-    console.log(">>>item", data);
     const res = await callImportUser(data);
     if (res && res.data) {
       notification.success({
@@ -46,9 +45,6 @@ function UserImportModal(props) {
     customRequest: dummyRequest,
     onChange(info) {
       const { status } = info.file;
-      if (status !== "uploading") {
-        console.log(info.file, info.fileList);
-      }
       if (status === "done") {
         if (info.fileList && info.fileList.length > 0) {
           const file = info.fileList[0].originFileObj;
@@ -74,9 +70,6 @@ function UserImportModal(props) {
       } else if (status === "error") {
         message.error(`${info.file.name} file upload failed.`);
       }
-    },
-    onDrop(e) {
-      console.log("Dropped files", e.dataTransfer.files);
     },
   };
   const columns = [

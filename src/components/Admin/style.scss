@@ -3,10 +3,11 @@
     min-height: 100vh;
     display: flex;
     flex-direction: column;
-    & .user{
+    & .user, & .book_manager{
         margin: 20px;
         box-shadow: 0 0 5px rgba(0,0,0,0.3);
     }
+    
 }
 .admin_header{
     display: flex;

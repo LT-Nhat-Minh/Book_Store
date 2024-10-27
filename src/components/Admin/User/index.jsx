@@ -39,7 +39,7 @@ function UserManager() {
   ]);
 
   const fetchUser = async () => {
-    const query = `user?current=${current}&pageSize=${pageSize}&${searchQuery}&${sortField}`;
+    const query = `?current=${current}&pageSize=${pageSize}&${searchQuery}&${sortField}`;
     const res = await callFetchUser(query);
     setIsLoading(true);
     if (res && res.data) {
@@ -53,10 +53,15 @@ function UserManager() {
     setSearchQuery(query);
   };
 
-  const handleRefresh = () => {
-    setCurrent("1");
-    setSearchQuery("");
-    setSortField("");
+  const handleRefresh = (clearSearch) => {
+    if (clearSearch) {
+      setCurrent("1");
+      setSearchQuery("");
+      setSortField("");
+    } else {
+      setCurrent("1");
+      setSortField("");
+    }
   };
 
   const handleExport = () => {
@@ -94,12 +99,11 @@ function UserManager() {
             type="primary"
             onClick={() => {
               setShowUserCreate(!showUserCreate);
-              form.resetFields();
             }}
           >
             Thêm mới
           </Button>
-          <Button onClick={handleRefresh}>
+          <Button onClick={() => handleRefresh(0)}>
             <RedoOutlined />
           </Button>
         </span>
@@ -122,7 +126,6 @@ function UserManager() {
       setPageSize(pagination.pageSize);
       setCurrent(1);
     }
-    console.log("params", pagination, filters, sorter, extra);
   };
 
   const columns = [
@@ -203,7 +206,6 @@ function UserManager() {
               twoToneColor={"#1777ff"}
               style={{ fontSize: "20px", cursor: "pointer" }}
               onClick={() => {
-                console.log(">>record", record);
                 setUserIsUpdating(record);
                 setShowUserUpdate(true);
               }}
@@ -254,7 +256,6 @@ function UserManager() {
         showUserCreate={showUserCreate}
         setShowUserCreate={setShowUserCreate}
         fetchUser={fetchUser}
-        form={form}
       />
       <UserImportModal
         showUserImport={showUserImport}
