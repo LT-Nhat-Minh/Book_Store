@@ -7,6 +7,7 @@ import {
   Divider,
   Form,
   InputNumber,
+  Modal,
   Pagination,
   Row,
   Space,
@@ -16,18 +17,30 @@ import React, { useEffect, useState } from "react";
 import { callFetchBook, callFetchCategory } from "../../services/api";
 import { useForm } from "antd/es/form/Form";
 import BookCard from "./BookCard";
+import aqp from "api-query-params";
+import "./style.scss";
 
 function Home() {
   const [listBook, setListBook] = useState([]);
+  const [pageSize, setPageSize] = useState(12);
+  const [current, setCurrent] = useState(1);
+  const [total, setTotal] = useState(0);
+  const [categoryQuery, setCategoryQuery] = useState("");
+  const [priceQuery, setPriceQuery] = useState("");
+  const [sortField, setSortField] = useState("sort=-sold");
   const [listCategory, setListCategory] = useState([]);
+  const [isFilterModalOpen, setIsFilterModalOpen] = useState(false);
   const [form] = useForm();
+  const [form_mobile] = useForm();
 
   useEffect(() => {
     fetchBook();
-  }, []);
+    console.log(listBook);
+  }, [current, pageSize, categoryQuery, priceQuery, sortField]);
 
   const fetchBook = async () => {
-    const resBook = await callFetchBook("");
+    const query = `?current=${current}&pageSize=${pageSize}&${categoryQuery}&${priceQuery}&${sortField}`;
+    const resBook = await callFetchBook(query);
     if (resBook && resBook.data) {
       setListBook(resBook);
     }
@@ -36,51 +49,75 @@ function Home() {
     if (resCategory && resCategory.data) {
       setListCategory(resCategory);
     }
-    console.log(resBook);
-    console.log(resCategory);
   };
 
-  const onCategoryChange = () => {};
+  const onChangeCategory = (values) => {
+    setCategoryQuery("category=" + values);
+  };
+
+  const onValuesChange = (values) => {
+    if (values.category && values.category.length > 0)
+      setCategoryQuery(`category=${values?.category}`);
+  };
+
+  const onChangeTab = (activeKey) => {
+    setSortField("sort=" + activeKey);
+  };
 
   const onFinish = (values) => {
-    console.log(values);
+    setCategoryQuery(`category=${values?.category}`);
+    const minPrice = values?.minPrice || 0;
+    const maxPrice = values?.maxPrice || 0;
+    setPriceQuery(
+      `&price>=${minPrice}${maxPrice == 0 ? "" : `&price<=${values?.maxPrice}`}`
+    );
   };
 
   const onReset = () => {
-    form.resetFields();
+    setPriceQuery("");
   };
 
   const tabItems = [
     {
-      key: "1",
+      key: "-sold",
       label: "Phổ biến",
     },
     {
-      key: "2",
+      key: "-createdAt",
       label: "Hàng mới",
     },
     {
-      key: "3",
-      label: "Bán chạy",
+      key: "price",
+      label: "Giá thấp đến cao",
+    },
+    {
+      key: "-price",
+      label: "Giá cao đến thấp",
     },
   ];
 
+  const handleFilter_mobile = () => {
+    setIsFilterModalOpen(false);
+  };
+
   return (
-    <div>
+    <div className={"home_page"}>
       <Row align="top" style={{ width: "100%" }}>
         <Col
-          md={4}
-          sm={0}
           xs={0}
+          sm={0}
+          md={0}
+          lg={0}
+          xl={5}
           style={{
             boxShadow: "0 0 5px rgba(0, 0, 0, 0.3)",
-            borderRadius: "24px",
+            borderRadius: "0 24px 24px 0",
             padding: "0 24px",
-            margin: "0 auto",
+            marginRight: "24px",
           }}
         >
-          <div className={"form-filter"}>
-            <div className="header">
+          <div className={"form_filter"}>
+            <div className="filter_header">
               <div style={{ display: "flex" }}>
                 <FilterOutlined />
                 <h2>&nbsp; Bộ lọc tìm kiếm</h2>
@@ -88,7 +125,12 @@ function Home() {
             </div>
             <div className={"filter-category"}>
               <Divider />
-              <Form form={form} labelCol={{ span: 24 }} onFinish={onFinish}>
+              <Form
+                form={form}
+                labelCol={{ span: 24 }}
+                onFinish={onFinish}
+                onValuesChange={onValuesChange}
+              >
                 <div>
                   <p style={{ fontSize: "24px", textIndent: "30px" }}>
                     Thể loại
@@ -96,8 +138,7 @@ function Home() {
                   <Form.Item name="category">
                     <Checkbox.Group
                       options={listCategory.data}
-                      defaultValue={["Apple"]}
-                      onChange={onCategoryChange}
+                      onChange={onChangeCategory}
                       style={{
                         display: "flex",
                         flexDirection: "column",
@@ -116,11 +157,7 @@ function Home() {
                   </p>
                   <Row gutter={24}>
                     <Col span={12}>
-                      <Form.Item
-                        name="minPrice"
-                        label={"Từ"}
-                        labelCol={{ span: 4 }}
-                      >
+                      <Form.Item name="minPrice">
                         <InputNumber
                           formatter={(value) =>
                             `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
@@ -128,15 +165,12 @@ function Home() {
                           controls={false}
                           min={0}
                           style={{ width: "100%" }}
+                          placeholder="Từ"
                         />
                       </Form.Item>
                     </Col>
                     <Col span={12}>
-                      <Form.Item
-                        name="maxPrice"
-                        label={"Đến"}
-                        labelCol={{ span: 4 }}
-                      >
+                      <Form.Item name="maxPrice">
                         <InputNumber
                           formatter={(value) =>
                             `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
@@ -144,12 +178,14 @@ function Home() {
                           controls={false}
                           min={0}
                           style={{ width: "100%" }}
+                          placeholder="Đến"
                         />
                       </Form.Item>
                     </Col>
                   </Row>
+
                   <Form.Item>
-                    <Space style={{ float: "right", marginRight: "40px" }}>
+                    <Space className={"filter-button"}>
                       <Button type="primary" htmlType="submit">
                         Tìm kiếm
                       </Button>
@@ -164,27 +200,123 @@ function Home() {
           </div>
         </Col>
         <Col
-          md={19}
-          sm={24}
           xs={24}
+          sm={24}
+          md={24}
+          lg={24}
+          xl={18}
           style={{
             boxShadow: "0 0 5px rgba(0, 0, 0, 0.3)",
-            margin: "0 auto",
+            borderRadius: "24px",
+            width: "100% !important",
           }}
         >
-          <Tabs defaultActiveKey="1" items={tabItems} size={"large"} />
-          <Space>
-            <Row gutter={24}>
-              {listBook?.data?.map((item) => (
-                <Col key={item._id} span={{ xs: 3 }}>
-                  <BookCard book={item} />
-                </Col>
-              ))}
-            </Row>
-          </Space>
+          <span>
+            <Tabs
+              defaultActiveKey="1"
+              items={tabItems}
+              size={"large"}
+              style={{ padding: "10px 50px" }}
+              onChange={onChangeTab}
+            />
+          </span>
+          <div className={"filter_button_mobile"}>
+            <Button
+              type="primary"
+              icon={<FilterOutlined />}
+              iconPosition={"end"}
+              onClick={() => setIsFilterModalOpen(true)}
+            >
+              Bộ lọc
+            </Button>
+          </div>
+          <Modal
+            title="Bộ lọc"
+            open={isFilterModalOpen}
+            onOk={() => form_mobile.submit()}
+            onCancel={() => setIsFilterModalOpen(false)}
+          >
+            <Form
+              form={form_mobile}
+              labelCol={{ span: 24 }}
+              onFinish={onFinish}
+            >
+              <div>
+                <p style={{ fontSize: "24px", textIndent: "30px" }}>Thể loại</p>
+                <Form.Item name="category">
+                  <Checkbox.Group
+                    options={listCategory.data}
+                    onChange={onChangeCategory}
+                    style={{
+                      display: "flex",
+                      flexDirection: "column",
+                      gap: "20px",
+                    }}
+                  />
+                </Form.Item>
+                <p style={{ fontSize: "24px", textIndent: "30px" }}>
+                  Lọc theo giá
+                </p>
+                <Row gutter={24}>
+                  <Col span={12}>
+                    <Form.Item name="minPrice">
+                      <InputNumber
+                        formatter={(value) =>
+                          `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                        }
+                        controls={false}
+                        min={0}
+                        style={{ width: "100%" }}
+                        placeholder="Từ"
+                      />
+                    </Form.Item>
+                  </Col>
+                  <Col span={12}>
+                    <Form.Item name="maxPrice">
+                      <InputNumber
+                        formatter={(value) =>
+                          `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                        }
+                        controls={false}
+                        min={0}
+                        style={{ width: "100%" }}
+                        placeholder="Đến"
+                      />
+                    </Form.Item>
+                  </Col>
+                </Row>
+              </div>
+            </Form>
+          </Modal>
+          <div style={{ width: "100%" }} className={"space_container_book"}>
+            <Space style={{ width: "100%" }}>
+              <Row
+                gutter={[24, 24]}
+                style={{ margin: "auto", width: "100%" }}
+                type="flex"
+                wrap={true}
+                justify={"start"}
+              >
+                {listBook?.data?.result?.map((item) => (
+                  <Col
+                    key={item._id}
+                    xs={{ span: 12, style: { width: "480px" } }}
+                    sm={{ span: 8, style: { width: "576px" } }}
+                    md={{ span: 6, style: { width: "768px" } }}
+                    xl={{ span: 6, style: { width: "1200px" } }}
+                    xxl={{ span: 4, style: { width: "1600px" } }}
+                    className={"card"}
+                  >
+                    <BookCard book={item} />
+                  </Col>
+                ))}
+              </Row>
+            </Space>
+          </div>
           <Pagination
             defaultCurrent={1}
-            total={50}
+            pageSize={12}
+            total={listBook.total}
             align="end"
             style={{ margin: "50px 100px" }}
           />

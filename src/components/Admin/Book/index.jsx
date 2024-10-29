@@ -132,7 +132,8 @@ function BookManager(props) {
       dataIndex: "updatedAt",
       sorter: true,
       render(text, record, index) {
-        return moment(record._updatedAt).format("DD-MM-YYYY HH:mm:ss");
+        console.log(listBook);
+        return moment(record.updatedAt).format("DD-MM-YYYY HH:mm:ss");
       },
     },
     {

@@ -1,11 +1,12 @@
 .header{
-    max-width: 1200px;
     width: 100%;
     height: 100px;
+    position: relative;
     display: flex;
     justify-content: space-around;
     align-items: center;
     margin: auto;
+    box-shadow: 0 0 5px rgba(0,0,0,0.3);
     & > .logo > a{
         display: flex;
         align-items: center;
@@ -23,6 +24,17 @@
         align-items: center;
         gap: 20px;
         width: 50%;
+        & > .cart{
+            font-size: 30px;
+            margin-right: 25px;
+        }
+    }
+    & > .searchBar_tablet{
+        display: none;
+        justify-content: center;
+        align-items: center;
+        gap: 5px;
+        width: 200px;
     }
     & > .navigation{
         position: relative;
@@ -30,7 +42,6 @@
         display: flex;
         justify-content: center;
         align-items: center;
-        gap: 20px;
         & > .navMenu{
             height: 100%;
             display: flex;
@@ -82,4 +93,46 @@
             }
         }
     }
+}
+
+@media only screen and (max-width: 575.98px) {
+    /* Styles for Phone */
+    .header{
+        & .navigation{
+            display: none;
+        }
+        & .searchBar{
+            width: 100%;
+            margin: 0 10px;
+        }
+        & .logo{
+            display: none;
+        }
+    }
+}
+@media only screen and (min-width: 576px) and (max-width: 991.98px) {
+/* Styles for Tablet */
+    .header{
+        justify-content: space-between;
+        & .searchBar{
+            display: none;
+        }
+        & .navigation{
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            & hr, & .account{
+                display: none;
+            }
+        }
+        & > .searchBar_tablet{
+            display: flex;
+            margin-right: 25px;
+        }
+    }
+}
+@media only screen and (min-width: 992px) {
+/* Styles for Laptop */
+
 }

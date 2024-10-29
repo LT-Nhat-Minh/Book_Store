@@ -17,13 +17,16 @@ import { doGetAccountAction } from "./redux/account/accountSlice";
 import { callFetchAccount } from "./services/api";
 import { Book } from "@mui/icons-material";
 import OrderManager from "./components/Admin/Order";
+import "./App.scss";
 
 const Layout = () => {
   return (
     <div className="layout-app">
-      <Header />
-      <Outlet />
-      <Footer />
+      <div className={"user_content"}>
+        <Header />
+        <Outlet />
+        <Footer />
+      </div>
     </div>
   );
 };

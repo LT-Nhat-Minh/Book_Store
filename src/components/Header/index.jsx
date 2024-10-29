@@ -1,6 +1,10 @@
-import { DownOutlined, ShoppingCartOutlined } from "@ant-design/icons";
+import {
+  DownOutlined,
+  SearchOutlined,
+  ShoppingCartOutlined,
+} from "@ant-design/icons";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import { Avatar, Badge, Dropdown, Input, message, Space } from "antd";
+import { Avatar, Badge, Button, Dropdown, Input, message, Space } from "antd";
 import React, { useEffect, useState } from "react";
 import logo from "../../assets/Logo3.png";
 import "./style.scss";
@@ -31,9 +35,7 @@ const Header = () => {
     }
   };
 
-  useEffect(() => {
-    console.log(user);
-  }, []);
+  useEffect(() => {}, []);
 
   const items = [
     ...(isAuthenticated && user.role === "ADMIN"
@@ -62,7 +64,7 @@ const Header = () => {
     },
   ];
   return (
-    <>
+    <div>
       <div className="header">
         <div className="logo">
           <a href="/">
@@ -76,11 +78,9 @@ const Header = () => {
             enterButton
           />
           <div className="cart">
-            <a href="">
-              <Badge count={100}>
-                <ShoppingCartOutlined style={{ fontSize: "30px" }} />
-              </Badge>
-            </a>
+            <Badge count={100}>
+              <ShoppingCartOutlined style={{ fontSize: "30px" }} />
+            </Badge>
           </div>
         </div>
         <div className="navigation">
@@ -134,8 +134,19 @@ const Header = () => {
             )}
           </div>
         </div>
+        <div className="searchBar_tablet">
+          <Search
+            placeholder="input search loading with enterButton"
+            enterButton
+          />
+          <div className="cart">
+            <Badge count={100}>
+              <ShoppingCartOutlined style={{ fontSize: "30px" }} />
+            </Badge>
+          </div>
+        </div>
       </div>
-    </>
+    </div>
   );
 };
 
