@@ -63,6 +63,7 @@ const Header = () => {
       onClick: () => handleLogout(),
     },
   ];
+
   return (
     <div>
       <div className="header">
@@ -84,32 +85,6 @@ const Header = () => {
           </div>
         </div>
         <div className="navigation">
-          <div className="navMenu">
-            <a href="/">Home</a>
-            <a href="/about-us">AboutUs</a>
-            <div className="dropDown_shops">
-              <div
-                onClick={() => {
-                  handleDropDown();
-                }}
-                style={{
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "center",
-                }}
-              >
-                <p>Shops</p>
-                <ExpandMoreIcon />
-              </div>
-              {isDisplayed && (
-                <div className="menu">
-                  <p>Loại 1</p>
-                  <p>Loại 2</p>
-                  <p>Loại 3</p>
-                </div>
-              )}
-            </div>
-          </div>
           <hr style={{ height: "30px" }} />
           <div className="account">
             {isAuthenticated ? (

@@ -1,138 +1,118 @@
-.header{
-    width: 100%;
-    height: 100px;
-    position: relative;
+.header {
+  width: 100%;
+  height: 100px;
+  position: relative;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  margin: auto;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+  & > .logo > a {
     display: flex;
-    justify-content: space-around;
     align-items: center;
-    margin: auto;
-    box-shadow: 0 0 5px rgba(0,0,0,0.3);
-    & > .logo > a{
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        text-decoration: none;
-        & > img{
-            width: 100px;
-            aspect-ratio: 1/1;
-            border-radius: 0px;
-        }
+    justify-content: center;
+    text-decoration: none;
+    & > img {
+      width: 100px;
+      aspect-ratio: 1/1;
+      border-radius: 0px;
     }
-    & > .searchBar{
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        gap: 20px;
-        width: 50%;
-        & > .cart{
-            font-size: 30px;
-            margin-right: 25px;
-        }
-    }
-    & > .searchBar_tablet{
-        display: none;
-        justify-content: center;
-        align-items: center;
-        gap: 5px;
-        width: 200px;
-    }
-    & > .navigation{
-        position: relative;
-        height: 100%;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        & > .navMenu{
-            height: 100%;
-            display: flex;
-            align-items: center;
-            & > a, & > .dropDown_shops{
-                padding: 20px 10px;
-                display: flex;
-                align-items: center;
-                border-radius: 5px;
-                text-decoration: none;
-                color: black;
-                &:hover{
-                    cursor: pointer;
-                    background-color: #f6f6f6;
-                }
-            }
-        }
-        & > .account > a{
-            all: unset;
-            display: flex;
-            align-items: center;
-            padding: 20px 10px;
-            &:hover{
-                cursor: pointer;
-            }
-        }
-    }
-}
-.dropDown_shops{
-    position: relative;
-    width: 100px;
+  }
+  & > .searchBar {
     display: flex;
-    justify-content: space-between;
-    & > .menu{
-        position: absolute;
-        width: 100%;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        top: 80px;
-        left: 0;
-        transform: translateX();
-        box-shadow: 0 0 10px rgba(0,0,0,0.3);
-        text-wrap: nowrap;
-        & > *{
-            padding: 20px 10px;
-            &:hover{
-                background-color: #f6f6f6;
-            }
-        }
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    width: 50%;
+    & > .cart {
+      font-size: 30px;
+      margin-right: 25px;
     }
+  }
+  & > .searchBar_tablet {
+    display: none;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+    width: 200px;
+  }
+  & > .navigation {
+    position: relative;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    & > .navMenu {
+      height: 100%;
+      display: flex;
+      align-items: center;
+      & > a,
+      & > .dropDown_shops {
+        padding: 20px 10px;
+        display: flex;
+        align-items: center;
+        border-radius: 5px;
+        text-decoration: none;
+        color: black;
+        &:hover {
+          cursor: pointer;
+        }
+      }
+    }
+    & > .account > a {
+      all: unset;
+      display: flex;
+      align-items: center;
+      padding: 20px 10px;
+      &:hover {
+        cursor: pointer;
+      }
+    }
+  }
 }
 
 @media only screen and (max-width: 575.98px) {
-    /* Styles for Phone */
-    .header{
-        & .navigation{
-            display: none;
-        }
-        & .searchBar{
-            width: 100%;
-            margin: 0 10px;
-        }
-        & .logo{
-            display: none;
-        }
+  /* Styles for Phone */
+  .header {
+    & .navigation {
+      display: none;
     }
+    & .searchBar {
+      width: 100%;
+      margin: 0 10px;
+    }
+    & .logo {
+      display: none;
+    }
+  }
 }
 @media only screen and (min-width: 576px) and (max-width: 991.98px) {
-/* Styles for Tablet */
-    .header{
-        justify-content: space-between;
-        & .searchBar{
-            display: none;
-        }
-        & .navigation{
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            & hr, & .account{
-                display: none;
-            }
-        }
-        & > .searchBar_tablet{
-            display: flex;
-            margin-right: 25px;
-        }
+  /* Styles for Tablet */
+  .header {
+    justify-content: space-between;
+    & .searchBar {
+      display: none;
     }
+    & > .searchBar_tablet {
+      width: 70%;
+    }
+    & .navigation {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      & hr,
+      & .account {
+        display: none;
+      }
+    }
+    & > .searchBar_tablet {
+      display: flex;
+      margin-right: 25px;
+    }
+  }
 }
 @media only screen and (min-width: 992px) {
-/* Styles for Laptop */
-
+  /* Styles for Laptop */
 }

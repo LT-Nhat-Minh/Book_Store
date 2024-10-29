@@ -11,6 +11,7 @@ function BookCard(props) {
     getThumbnailURL();
   }, []);
   const getThumbnailURL = async () => {
+    console.log(props.book.thumbnail);
     const url = `${import.meta.env.VITE_BACKEND_URL}/images/book/${
       props.book.thumbnail
     }`;

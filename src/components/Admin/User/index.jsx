@@ -17,7 +17,7 @@ function UserManager() {
   const [listUser, setListUser] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
-  const [sortField, setSortField] = useState("");
+  const [sortField, setSortField] = useState("sort=-updatedAt");
   const [showUserDetail, setShowUserDetail] = useState(false);
   const [userDetailData, setUserDetailData] = useState(null);
   const [showUserCreate, setShowUserCreate] = useState(false);
@@ -57,10 +57,10 @@ function UserManager() {
     if (clearSearch) {
       setCurrent("1");
       setSearchQuery("");
-      setSortField("");
+      setSortField("sort=-updatedAt");
     } else {
       setCurrent("1");
-      setSortField("");
+      setSortField("sort=-updatedAt");
     }
   };
 

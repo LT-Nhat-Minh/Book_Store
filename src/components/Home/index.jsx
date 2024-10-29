@@ -35,12 +35,12 @@ function Home() {
 
   useEffect(() => {
     fetchBook();
-    console.log(listBook);
   }, [current, pageSize, categoryQuery, priceQuery, sortField]);
 
   const fetchBook = async () => {
     const query = `?current=${current}&pageSize=${pageSize}&${categoryQuery}&${priceQuery}&${sortField}`;
     const resBook = await callFetchBook(query);
+    console.log(query);
     if (resBook && resBook.data) {
       setListBook(resBook);
     }
@@ -65,12 +65,12 @@ function Home() {
   };
 
   const onFinish = (values) => {
-    setCategoryQuery(`category=${values?.category}`);
     const minPrice = values?.minPrice || 0;
     const maxPrice = values?.maxPrice || 0;
     setPriceQuery(
-      `&price>=${minPrice}${maxPrice == 0 ? "" : `&price<=${values?.maxPrice}`}`
+      `&price>=${minPrice}${maxPrice == 0 ? "" : `&price<=${maxPrice}`}`
     );
+    form.resetFields("maxPrice", "minPrice");
   };
 
   const onReset = () => {
@@ -234,7 +234,11 @@ function Home() {
             title="Bộ lọc"
             open={isFilterModalOpen}
             onOk={() => form_mobile.submit()}
-            onCancel={() => setIsFilterModalOpen(false)}
+            onCancel={() => {
+              setIsFilterModalOpen(false);
+              form_mobile.resetFields(["minPrice", "maxPrice"]);
+              form_mobile.submit();
+            }}
           >
             <Form
               form={form_mobile}
@@ -315,10 +319,12 @@ function Home() {
           </div>
           <Pagination
             defaultCurrent={1}
-            pageSize={12}
-            total={listBook.total}
+            pageSize={6}
+            total={15}
             align="end"
             style={{ margin: "50px 100px" }}
+            responsive={true}
+            onChange={(page) => setCurrent(page)}
           />
         </Col>
       </Row>
