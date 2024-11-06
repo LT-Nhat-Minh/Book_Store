@@ -21,7 +21,7 @@ import aqp from "api-query-params";
 import "./style.scss";
 
 function Home() {
-  const [listBook, setListBook] = useState([]);
+  const [listBook, setListBook] = useState();
   const [pageSize, setPageSize] = useState(12);
   const [current, setCurrent] = useState(1);
   const [total, setTotal] = useState(0);
@@ -40,11 +40,10 @@ function Home() {
   const fetchBook = async () => {
     const query = `?current=${current}&pageSize=${pageSize}&${categoryQuery}&${priceQuery}&${sortField}`;
     const resBook = await callFetchBook(query);
-    console.log(query);
     if (resBook && resBook.data) {
       setListBook(resBook);
+      setTotal(resBook.data.meta.total);
     }
-
     const resCategory = await callFetchCategory();
     if (resCategory && resCategory.data) {
       setListCategory(resCategory);
@@ -70,6 +69,7 @@ function Home() {
     setPriceQuery(
       `&price>=${minPrice}${maxPrice == 0 ? "" : `&price<=${maxPrice}`}`
     );
+    setIsFilterModalOpen(false);
     form.resetFields("maxPrice", "minPrice");
   };
 
@@ -232,6 +232,8 @@ function Home() {
           </div>
           <Modal
             title="Bộ lọc"
+            okText={"Tìm kiếm"}
+            cancelText={"Xóa"}
             open={isFilterModalOpen}
             onOk={() => form_mobile.submit()}
             onCancel={() => {
@@ -319,12 +321,15 @@ function Home() {
           </div>
           <Pagination
             defaultCurrent={1}
-            pageSize={6}
-            total={15}
+            pageSize={12}
+            total={total}
             align="end"
             style={{ margin: "50px 100px" }}
             responsive={true}
-            onChange={(page) => setCurrent(page)}
+            onChange={(page) => {
+              setCurrent(page);
+              console.log(listBook.data.meta.total);
+            }}
           />
         </Col>
       </Row>

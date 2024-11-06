@@ -1,5 +1,5 @@
 const Footer = () => {
-  return <div style={{ textAlign: "center" }}>footer</div>;
+  return <div style={{ textAlign: "center" }}></div>;
 };
 
 export default Footer;
