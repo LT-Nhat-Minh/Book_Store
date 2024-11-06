@@ -1,7 +1,10 @@
 # Book Store - Mini E-commerce Website 
 
 This is a mini e-commerce website where users can order products online. The project is designed to practice building a real-world application and implementing technical skills in full-stack development.
-Here is only FE, but we have demo video on .....
+
+Here is only FE. Please watch the demo video for a quick overview of how the app works:
+
+[Watch Demo Video](https://drive.google.com/file/d/1zRIBrcw0pK9tsk4BD0DaPHFMql-jxAxw/view?usp=sharing)
 
 ## Project Purpose
 
